@@ -22,14 +22,46 @@ var planets =   {
     "url": "https://swapi.co/api/planets/2/"
 }
 
-for(var key in planets){
-    $('#main-table').append("<tr><td>"+key+"</td><td>:</td><td class='item" + key +"'></td></tr>");
-    var value = Object.getOwnPropertyDescriptor(planets, key).value;
-    if(value.constructor == Array){
-        value.forEach(function(item){
-            $('.item' + key).append(item + "<br>");
+window.onload = displayAll();
+
+function displayAll(){
+
+    for(var key in planets){
+        $('#main-table').append("<tr><td>"+key+"</td><td>:</td><td class='item" + key +"'></td></tr>");
+        $('#data-selector').append("<option value='" +key+ "'>" +key+ "</option>");
+        var value = Object.getOwnPropertyDescriptor(planets, key).value;
+        if(value.constructor == Array){
+            value.forEach(function(item){
+                $('.item' + key).append(item + "<br>");
+            })
+        }else{
+            $('.item' + key).append(value);
+        }
+    }   
+}
+
+$("#btn-filter").on("click",function(e){
+    e.preventDefault();
+    var selected = $('#data-selector').find(':selected').text();
+    var selected_value = Object.getOwnPropertyDescriptor(planets,selected).value;
+    $('#modal-title').text(selected);
+    $('#modal-table').append("<tr><td>"+selected+"</td><td>:</td><td class='modal-tb-item'></td></tr>");
+    if(selected_value.constructor == Array){
+        $(".modal-tb-item").html("<div class='tb-item'>");
+        selected_value.forEach(function(item){
+            $('.tb-item').append(item + "<br>");
         })
     }else{
-        $('.item' + key).append(value);
+        $(".modal-tb-item").html("<div class='tb-item'>");
+        $('.tb-item').append(selected_value);
+
     }
-}
+    $("#modal").modal('show');
+});
+
+
+$('.close-modal').on("click",function(){
+    $("#modal").modal('hide');
+    console.log("click");
+    $("#modal-table").empty();
+})
