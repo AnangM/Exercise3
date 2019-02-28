@@ -22,16 +22,14 @@ var planets =   {
     "url": "https://swapi.co/api/planets/2/"
 }
 
-
-var main = document.getElementById("tr1");
-
-planets.residents.forEach(element => {
-        var new_P = document.createElement("td");
-        var doc = document.createTextNode(element);
-        new_P.appendChild(doc);
-        main.appendChild(new_P);
-        console.log(element);
-    })
-    // temp.forEach(element => {
-        //     console.log(element);
-        // });
+for(var key in planets){
+    $('#main-table').append("<tr><td>"+key+"</td><td>:</td><td class='item" + key +"'></td></tr>");
+    var value = Object.getOwnPropertyDescriptor(planets, key).value;
+    if(value.constructor == Array){
+        value.forEach(function(item){
+            $('.item' + key).append(item + "<br>");
+        })
+    }else{
+        $('.item' + key).append(value);
+    }
+}
